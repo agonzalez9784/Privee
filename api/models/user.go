@@ -18,13 +18,13 @@ CREATE TABLE IF NOT EXISTS "User" (
 */
 
 type User struct {
-	userID   string
-	username string
-	password string
-	email    string
-	city     string
-	state    string
-	isChef   bool
+	UserID   string
+	Username string
+	Password string
+	Email    string
+	City     string
+	State    string
+	IsChef   bool
 }
 
 func CreateUser(userID string, username string, password string, email string, city string, state string, isChef bool) {
@@ -52,6 +52,29 @@ func CreateUser(userID string, username string, password string, email string, c
 	return
 }
 
+func GetUserByUsername(username string) (User, error) {
+	db, err := dbConnector()
+
+	defer db.Close()
+
+	stmt, err := db.Prepare(`SELECT * FROM "User" WHERE username = $1;`)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer stmt.Close()
+
+	var user User
+
+	err = stmt.QueryRow(username).Scan(&user.UserID, &user.Username, &user.Password, &user.Email, &user.City, &user.State, &user.IsChef)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			log.Fatal(err)
+		}
+	}
+	return user, nil
+}
 func GetUser(userID string) (User, error) {
 	db, err := dbConnector()
 
@@ -67,7 +90,7 @@ func GetUser(userID string) (User, error) {
 
 	var user User
 
-	err = stmt.QueryRow(userID).Scan(&user.userID, &user.username, &user.password, &user.email, &user.city, &user.state, &user.isChef)
+	err = stmt.QueryRow(userID).Scan(&user.UserID, &user.Username, &user.Password, &user.Email, &user.City, &user.State, &user.IsChef)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			log.Fatal(err)

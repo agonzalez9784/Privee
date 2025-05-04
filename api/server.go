@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api/controllers"
 	"api/models"
 	"fmt"
 	"log"
@@ -16,4 +17,8 @@ func main() {
 	}
 	fmt.Print(res)
 
+	//controllers.RegisterUserAccount("itspizzatime", "coolpeople123", "test@gmail.com")
+	new := controllers.AuthorizeUser("itspizzatime", "ewrerer")
+
+	fmt.Print(new)
 }
