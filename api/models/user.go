@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 )
 
@@ -35,8 +36,8 @@ func CreateUser(userID string, username string, password string, email string, c
 	stmt, err := db.Prepare(`INSERT INTO "User" (userID, username, password, email, city, state, isChef) VALUES ($1, $2, $3, $4, $5, $6, $7);`)
 
 	if err != nil {
-
-		log.Fatal(err)
+		fmt.Printf("1")
+		return
 	}
 
 	defer stmt.Close()
@@ -44,7 +45,8 @@ func CreateUser(userID string, username string, password string, email string, c
 	_, err = stmt.Exec(userID, username, password, email, city, state, isChef)
 
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf(err.Error())
+		return
 	}
 
 	defer stmt.Close()
@@ -78,12 +80,15 @@ func GetUserByUsername(username string) (User, error) {
 func GetUser(userID string) (User, error) {
 	db, err := dbConnector()
 
+	failedUser := User{}
+	failedUser.UserID = ""
+
 	defer db.Close()
 
 	stmt, err := db.Prepare(`SELECT * FROM "User" WHERE userID = $1;`)
 
 	if err != nil {
-		log.Fatal(err)
+		return failedUser, err
 	}
 
 	defer stmt.Close()
@@ -93,7 +98,7 @@ func GetUser(userID string) (User, error) {
 	err = stmt.QueryRow(userID).Scan(&user.UserID, &user.Username, &user.Password, &user.Email, &user.City, &user.State, &user.IsChef)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			log.Fatal(err)
+			return failedUser, err
 		}
 	}
 	return user, nil
