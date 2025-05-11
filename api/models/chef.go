@@ -38,6 +38,38 @@ func CreateChef(chefID string, userID string, profilePhoto string, firstName str
 	return
 }
 
+func GetChefsByLocation(city string, state string) ([]Chef, error) {
+	db, err := dbConnector()
+
+	defer db.Close()
+
+	stmt, err := db.Prepare(`SELECT "Chef".*, "User"."city", "User"."location" FROM "Chef" INNER JOIN "User" ON "Chef"."userid" = "User"."userid" WHERE "User"."city" = $1 AND "User"."location" = $2;`)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer stmt.Close()
+
+	var chefs []Chef
+
+	rows, err := stmt.Query(city, state)
+
+	for rows.Next() {
+		var chef Chef
+		if err := rows.Scan(&chef.chefID, &chef.userID, &chef.profilePhoto, &chef.firstName, &chef.lastName, &chef.description, &chef.ordersFulfilled); err != nil {
+			log.Fatal(err)
+		}
+		chefs = append(chefs, chef)
+	}
+
+	if err := rows.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	return chefs, nil
+}
+
 func GetChef(chefID string) (Chef, error) {
 	db, err := dbConnector()
 
