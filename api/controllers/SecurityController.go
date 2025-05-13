@@ -12,6 +12,7 @@ func hasOwnership() {
 	x = x + 1
 }
 
+
 func AuthorizeUser(username string, password string) (string, error) {
 
 	userData, err := models.GetUserByUsername(username)

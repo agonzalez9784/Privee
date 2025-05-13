@@ -6,11 +6,13 @@ import (
 )
 
 type Chef struct {
-	chefID, userID      string
-	firstName, lastName string
-	profilePhoto        string
-	description         string
-	ordersFulfilled     int
+	ChefID          string `json:"chefID"`
+	UserID          string `json:"userID"`
+	FirstName       string `json:"firstName"`
+	LastName        string `json:"lastName"`
+	ProfilePhoto    string `json:"profilePhoto"`
+	Description     string `json:"description"`
+	OrdersFulfilled int    `json:"ordersFulfilled"`
 }
 
 func CreateChef(chefID string, userID string, profilePhoto string, firstName string, lastName string, description string, ordersFulfilled int) {
@@ -43,7 +45,7 @@ func GetChefsByLocation(city string, state string) ([]Chef, error) {
 
 	defer db.Close()
 
-	stmt, err := db.Prepare(`SELECT "Chef".*, "User"."city", "User"."location" FROM "Chef" INNER JOIN "User" ON "Chef"."userid" = "User"."userid" WHERE "User"."city" = $1 AND "User"."location" = $2;`)
+	stmt, err := db.Prepare(`SELECT "Chef".*, "User"."city", "User"."state" FROM "Chef" INNER JOIN "User" ON "Chef"."userid" = "User"."userid" WHERE "User"."city" = $1 AND "User"."state" = $2;`)
 
 	if err != nil {
 		log.Fatal(err)
@@ -57,7 +59,7 @@ func GetChefsByLocation(city string, state string) ([]Chef, error) {
 
 	for rows.Next() {
 		var chef Chef
-		if err := rows.Scan(&chef.chefID, &chef.userID, &chef.profilePhoto, &chef.firstName, &chef.lastName, &chef.description, &chef.ordersFulfilled); err != nil {
+		if err := rows.Scan(&chef.ChefID, &chef.UserID, &chef.ProfilePhoto, &chef.FirstName, &chef.LastName, &chef.Description, &chef.OrdersFulfilled); err != nil {
 			log.Fatal(err)
 		}
 		chefs = append(chefs, chef)
@@ -85,7 +87,7 @@ func GetChef(chefID string) (Chef, error) {
 
 	var chef Chef
 
-	err = stmt.QueryRow(chefID).Scan(&chef.chefID, &chef.userID, &chef.profilePhoto, &chef.firstName, &chef.lastName, &chef.description, &chef.ordersFulfilled)
+	err = stmt.QueryRow(chefID).Scan(&chef.ChefID, &chef.UserID, &chef.ProfilePhoto, &chef.FirstName, &chef.LastName, &chef.Description, &chef.OrdersFulfilled)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			log.Fatal(err)
