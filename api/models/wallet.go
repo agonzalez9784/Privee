@@ -14,9 +14,9 @@ CREATE TABLE IF NOT EXISTS "Wallet" (
 */
 
 type Wallet struct {
-	walletID string
-	userID   string
-	amount   float64
+	WalletID string
+	UserID   string
+	Amount   float64
 }
 
 func CreateWallet(walletID string, userID string, amount string) {
@@ -44,6 +44,30 @@ func CreateWallet(walletID string, userID string, amount string) {
 	return
 }
 
+func GetWalletByUserID(userID string) (Wallet, error) {
+	db, err := dbConnector()
+
+	defer db.Close()
+
+	stmt, err := db.Prepare(`SELECT * FROM "Wallet" WHERE userID = $1;`)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer stmt.Close()
+
+	var wallet Wallet
+
+	err = stmt.QueryRow(userID).Scan(&wallet.WalletID, &wallet.UserID, &wallet.Amount)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			log.Fatal(err)
+		}
+	}
+	return wallet, nil
+}
+
 func GetWallet(walletID string) (Wallet, error) {
 	db, err := dbConnector()
 
@@ -59,7 +83,7 @@ func GetWallet(walletID string) (Wallet, error) {
 
 	var wallet Wallet
 
-	err = stmt.QueryRow(walletID).Scan(&wallet.walletID, &wallet.userID, &wallet.amount)
+	err = stmt.QueryRow(walletID).Scan(&wallet.WalletID, &wallet.UserID, &wallet.Amount)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			log.Fatal(err)

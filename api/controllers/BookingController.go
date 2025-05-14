@@ -21,12 +21,44 @@ func BookAChef(userID string, chefID string, startTime string, endTime string, r
 	return booking, nil
 }
 
-func AcceptBooking() {
+func AcceptBooking(bookingID string) {
 
-	models.UpdateBooking()
+	booking, err := models.GetBooking(bookingID)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	models.UpdateBooking(bookingID, booking.CreatedAt, "accepted", booking.UserID, booking.ChefID, booking.StartTime, booking.EndTime, booking.Rate)
 }
 
-func DeclineBooking() {
+func ConfirmArrival(bookingID string) {
+	booking, err := models.GetBooking(bookingID)
 
-	models.UpdateBooking()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	models.UpdateBooking(bookingID, booking.CreatedAt, "in progress", booking.UserID, booking.ChefID, booking.StartTime, booking.EndTime, booking.Rate)
+}
+
+func DeclineBooking(bookingID string) {
+
+	booking, err := models.GetBooking(bookingID)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	models.UpdateBooking(bookingID, booking.CreatedAt, "declined", booking.UserID, booking.ChefID, booking.StartTime, booking.EndTime, booking.Rate)
+}
+
+func noShow(bookingID string) {
+	booking, err := models.GetBooking(bookingID)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	models.UpdateBooking(bookingID, booking.CreatedAt, "no show", booking.UserID, booking.ChefID, booking.StartTime, booking.EndTime, booking.Rate)
 }

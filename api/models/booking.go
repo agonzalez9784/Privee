@@ -6,14 +6,14 @@ import (
 )
 
 type Booking struct {
-	bookingID string
-	createdAt string
-	status    string
-	userID    string
-	chefID    string
-	startTime string
-	endTime   string
-	rate      float64
+	BookingID string
+	CreatedAt string
+	Status    string
+	UserID    string
+	ChefID    string
+	StartTime string
+	EndTime   string
+	Rate      float64
 }
 
 func CreateBooking(bookingID string, createdAt string, status string, userID string, chefID string, startTime string, endTime string, rate float64) {
@@ -56,7 +56,7 @@ func GetBooking(bookingID string) (Booking, error) {
 
 	var booking Booking
 
-	err = stmt.QueryRow(bookingID).Scan(&booking.bookingID, &booking.createdAt, &booking.status, &booking.userID, &booking.chefID, &booking.startTime, &booking.endTime, &booking.rate)
+	err = stmt.QueryRow(bookingID).Scan(&booking.BookingID, &booking.CreatedAt, &booking.Status, &booking.UserID, &booking.ChefID, &booking.StartTime, &booking.EndTime, &booking.Rate)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			log.Fatal(err)

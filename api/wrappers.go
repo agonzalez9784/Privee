@@ -84,11 +84,11 @@ func searchForChefs(w http.ResponseWriter, r *http.Request) {
 }
 
 func declineBooking(w http.ResponseWriter, r *http.Request) {
-
+	controllers.DeclineBooking()
 }
 
 func addExperience(w http.ResponseWriter, r *http.Request) {
-
+	controllers.AddExperience()
 }
 
 func updatePortfolio(w http.ResponseWriter, r *http.Request) {
@@ -109,15 +109,15 @@ func sendMessage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func approveBooking(w http.ResponseWriter, r *http.Request) {
-
+	controllers.AcceptBooking()
 }
 
 func confirmArrival(w http.ResponseWriter, r *http.Request) {
-
+	controllers.ConfirmArrival()
 }
 
 func noShow(w http.ResponseWriter, r *http.Request) {
-
+	controllers.noShow()
 }
 
 func disputeBooking(w http.ResponseWriter, r *http.Request) {
