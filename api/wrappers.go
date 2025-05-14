@@ -84,52 +84,86 @@ func searchForChefs(w http.ResponseWriter, r *http.Request) {
 }
 
 func declineBooking(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
 	controllers.DeclineBooking()
 }
 
 func addExperience(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
 	controllers.AddExperience()
 }
 
 func updatePortfolio(w http.ResponseWriter, r *http.Request) {
-
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
 }
 
+/* REDACTED CAN JUST USE CONDITIONS IN THE SEND MESSAGE FUNC TO CHECK IF THE CONVERSATIONS EXISTS
 func newConversation(w http.ResponseWriter, r *http.Request) {
 
 }
 
 func conversation(w http.ResponseWriter, r *http.Request) {
 
-}
+}*/
 
 func sendMessage(w http.ResponseWriter, r *http.Request) {
+
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
+
 func approveBooking(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+
 	controllers.AcceptBooking()
 }
 
 func confirmArrival(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+
 	controllers.ConfirmArrival()
 }
 
 func noShow(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+
 	controllers.noShow()
 }
 
 func disputeBooking(w http.ResponseWriter, r *http.Request) {
-
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
 }
 
 func review(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
+
 }
-func requestFefund(w http.ResponseWriter, r *http.Request) {
+
+func requestRefund(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
 
 }
 
@@ -165,8 +199,9 @@ func bookAChef(w http.ResponseWriter, r *http.Request) { //NOTE need to subtract
 
 func addFundsToWallet(w http.ResponseWriter, r *http.Request) {
 
-}
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
 
-func requestRefund(w http.ResponseWriter, r *http.Request) {
-
+	controllers.AddFunds()
 }
