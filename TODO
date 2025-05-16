@@ -1,0 +1,17 @@
+Users should be able to:
+[*] Create an account as a regular user
+[] Search for chefs in a certain area (by city)
+[] View chef's profiles and experience
+[] Message a chef
+[] Book time with a chef
+[] Leave a review to a chef
+[] confirm arrival
+
+Chef's should be able 
+[] Create an account as a chef
+[] create their profile
+[] add experience
+[] approve bookings
+[] decline bookings
+[] message their users back
+[] update their profiles
