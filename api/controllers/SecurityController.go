@@ -7,11 +7,16 @@ import (
 	"log"
 )
 
-func hasOwnership() {
-	x := 0
-	x = x + 1
-}
 
+func ChefPermissionsForBookings(bookingID string, chefID string) bool{
+	booking, err := models.GetBooking(bookingID)
+	
+	if(booking.ChefID == chefID) {
+		return true
+	}
+
+	return false
+}
 
 func AuthorizeUser(username string, password string) (string, error) {
 

@@ -9,6 +9,44 @@ import (
 
 var secretKey = []byte("secret-key")
 
+type Token struct{
+	UserID string
+	Exp time.Time
+}
+func ParseToken(tokenString string) Token{
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Error("Oops! Something went wrong!")
+		}
+	})
+
+	if err != nil {
+		
+	}
+
+ 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+        userID, ok := claims["userID"].(string)
+        if !ok {
+            return "", time.Time{}, fmt.Errorf("userID not found in token")
+        }
+
+        expFloat, ok := claims["exp"].(float64)
+        if !ok {
+            return "", time.Time{}, fmt.Errorf("exp not found or invalid in token")
+        }
+
+        expirationTime := time.Unix(int64(expFloat), 0)
+	}
+
+	parsedToken := Token{
+		UserID: userID,
+		Exp: expFloat
+	}
+	
+	return parsedToken
+}
+
 func CreateToken(userID string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{

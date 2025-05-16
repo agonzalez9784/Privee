@@ -84,10 +84,16 @@ func searchForChefs(w http.ResponseWriter, r *http.Request) {
 }
 
 func declineBooking(w http.ResponseWriter, r *http.Request) {
+	
+	bookingID := r.FormValue("bookingID")
+	userID := r.FormValue("userID")
+
 	if r.Method != http.MethodPost {
+		
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
-	controllers.DeclineBooking()
+
+	controllers.DeclineBooking(bookingID)
 }
 
 func addExperience(w http.ResponseWriter, r *http.Request) {
@@ -147,9 +153,20 @@ func noShow(w http.ResponseWriter, r *http.Request) {
 }
 
 func disputeBooking(w http.ResponseWriter, r *http.Request) {
+	bookingID := ""
+	token := r.FormValue("token")
+
+	
+
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
+
+	if(!controllers.ChefPermissionsForBookings(bookingID, chefID)){
+		http.Error(w, "You don't have permission to do that!", http.StatusMethodNotAllowed)
+	}
+
+	
 }
 
 func review(w http.ResponseWriter, r *http.Request) {
