@@ -7,25 +7,52 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"api/utils"
 )
 
-func RegisterUserWrapper(w http.ResponseWriter, r *http.Request) {
+func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
-	if r.Method == http.MethodPost {
-		username := r.FormValue("username")
-		password := r.FormValue("password")
-		email := r.FormValue("email")
-
-		controllers.RegisterUserAccount(username, password, email)
-		fmt.Fprintln(w, "This is a POST request.")
-
-	} else {
+	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 
+	//Values
+	username := r.FormValue("username")
+	password := r.FormValue("password")
+	email := r.FormValue("email")
+	userID := utils.GenerateID(15)
+
+	//Connection
+	db, err := utils.DBConnector()
+
+	defer db.Close()
+
+	if err != nil {
+		http.Error(w, "Oops! Something went wrong!", http.StatusInternalServerError)
+	}
+
+	//Prepared Statement
+	stmt, err := db.Prepare(`INSERT INTO "User" (userID, username, password, email, city, state, isChef) VALUES ($1, $2, $3, $4, $5, $6, $7);`)
+
+	if err != nil {
+		http.Error(w, "Oops! Something went wrong!", http.StatusInternalServerError)
+	}
+
+	defer stmt.Close()
+
+	//Execution
+	_, err := stmt.Exec(userID, username, password, email, "", "", false)
+
+	if err != nil {
+		http.Error(w, "Oops! Something went wrong!", http.StatusInternalServerError)
+	}
+
+	//Response
+	w.Header().Set("Content-Type", "text/plain")
+	w.WriteHeader(http.StatusOK)
 }
 
-func AuthorizeUserWrapper(w http.ResponseWriter, r *http.Request) {
+func AuthorizeUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
@@ -54,6 +81,7 @@ func AuthorizeUserWrapper(w http.ResponseWriter, r *http.Request) {
 }
 
 func searchForChefs(w http.ResponseWriter, r *http.Request) {
+	
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}

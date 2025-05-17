@@ -13,8 +13,8 @@ func main() {
 	//USERS AND REGISTRATION
 
 	//normal users
-	http.HandleFunc("/registerUser", RegisterUserWrapper)
-	http.HandleFunc("/authorizeUser", AuthorizeUserWrapper)
+	http.HandleFunc("/registerUser", RegisterUser)
+	http.HandleFunc("/authorizeUser", AuthorizeUser)
 
 	//chefs
 
